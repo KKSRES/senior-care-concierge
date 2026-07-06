@@ -74,7 +74,7 @@ graph TD
 ![ElderlyCareGuide Workflow Diagram](assets/architecture_diagram.png?v=2)
 
 ### Cover Page Banner
-![ElderlyCareGuide Cover Page Banner](assets/cover_page_banner.png)
+![ElderlyCareGuide Cover Page Banner](assets/cover_page_banner.png?v=2)
 
 ---
 
