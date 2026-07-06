@@ -71,7 +71,7 @@ graph TD
 ## 🖼️ Assets
 
 ### Workflow Diagram
-![ElderlyCareGuide Workflow Diagram](assets/architecture_diagram.png)
+![ElderlyCareGuide Workflow Diagram](assets/architecture_diagram.png?v=2)
 
 ### Cover Page Banner
 ![ElderlyCareGuide Cover Page Banner](assets/cover_page_banner.png)
