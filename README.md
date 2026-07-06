@@ -147,7 +147,7 @@ make run
    git add .
    git commit -m "Initial commit: elderlycareguide-concierge ADK agent"
    git branch -M main
-   git remote add origin https://github.com/<your-username>/elderlycareguide-concierge.git
+   git remote add origin https://github.com/KKSRES/senior-care-concierge.git
    git push -u origin main
    ```
 
