@@ -2,6 +2,7 @@ import datetime
 import json
 import logging
 import re
+import sys
 from typing import Any, AsyncGenerator, Dict, List
 from pydantic import BaseModel, Field
 
@@ -151,7 +152,7 @@ medication_agent = LlmAgent(
         McpToolset(
             connection_params=StdioConnectionParams(
                 server_params=StdioServerParameters(
-                    command="python",
+                    command=sys.executable,
                     args=["-m", "app.mcp_server"],
                 ),
             ),
@@ -173,7 +174,7 @@ appointment_agent = LlmAgent(
         McpToolset(
             connection_params=StdioConnectionParams(
                 server_params=StdioServerParameters(
-                    command="python",
+                    command=sys.executable,
                     args=["-m", "app.mcp_server"],
                 ),
             ),
@@ -192,7 +193,7 @@ resource_agent = LlmAgent(
         McpToolset(
             connection_params=StdioConnectionParams(
                 server_params=StdioServerParameters(
-                    command="python",
+                    command=sys.executable,
                     args=["-m", "app.mcp_server"],
                 ),
             ),
@@ -224,10 +225,17 @@ orchestrator_agent = LlmAgent(
 # ─────────────────────────────────────────────────────────────────────────────
 
 @node
-def security_checkpoint(ctx: Context, node_input: types.Content) -> Event:
+def security_checkpoint(ctx: Context, node_input: Any) -> Event:
     text_input = ""
-    if node_input and node_input.parts:
+    if isinstance(node_input, str):
+        text_input = node_input
+    elif hasattr(node_input, "parts") and node_input.parts:
         text_input = "".join(part.text for part in node_input.parts if part.text)
+    elif isinstance(node_input, dict) and "parts" in node_input:
+        parts = node_input["parts"]
+        text_input = "".join(part.get("text", "") for part in parts if isinstance(part, dict) and "text" in part)
+    elif node_input:
+        text_input = str(node_input)
     
     # Injection Detection
     injection_keywords = ["ignore previous instructions", "system prompt", "override rules", "bypass checkpoint"]
@@ -300,8 +308,10 @@ async def orchestrator_node(ctx: Context, node_input: Any) -> Event:
     
     response = await ctx.run_node(orchestrator_agent, node_input=agent_input)
     response_text = ""
-    if response and response.parts:
+    if response and hasattr(response, "parts") and response.parts:
         response_text = "".join(part.text for part in response.parts if part.text)
+    elif isinstance(response, str):
+        response_text = response
         
     # Check if a draft appointment requires human confirmation
     draft = ctx.state.get("appointment_draft")
