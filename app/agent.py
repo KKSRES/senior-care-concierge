@@ -24,10 +24,14 @@ from app.config import config
 class NoVerifyGemini(Gemini):
     @cached_property
     def api_client(self) -> Client:
+        import ssl
+        ssl_ctx = ssl.create_default_context()
+        ssl_ctx.check_hostname = False
+        ssl_ctx.verify_mode = ssl.CERT_NONE
         return Client(
             http_options=types.HttpOptions(
-                client_args={"verify": False},
-                async_client_args={"verify": False}
+                client_args={"verify": ssl_ctx},
+                async_client_args={"ssl": ssl_ctx}
             )
         )
 

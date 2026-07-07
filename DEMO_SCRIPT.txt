@@ -2,7 +2,7 @@
 Taking care of our aging loved ones is one of the most rewarding yet challenging responsibilities we face. (pause) Keeping track of multiple medications, coordinating clinic visits, and searching local support programs can quickly become overwhelming for seniors and their caregivers. (pause)
 
 [0:20 — WHAT IT IS]
-That is why we built the Senior Care Concierge Agent. This is a secure, ambient, and intelligent health coordinator built on the Google Agent Development Kit 2.0 framework under the Health and Wellness track. (pause)
+That is why we built the Senior Care Concierge Agent. This is a secure, ambient, and intelligent health coordinator built on the Google Agent Development Kit 2.0 framework under the Agents for Good track. (pause)
 
 [0:40 — SHOW THE BANNER]
 (show assets/cover_page_banner.png)
