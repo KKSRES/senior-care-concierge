@@ -37,11 +37,17 @@ from app.app_utils.typing import Feedback
 
 load_dotenv()
 setup_telemetry()
-# Must run before get_fast_api_app to set the tracer provider resource.
 setup_agent_engine_telemetry()
-_, project_id = google.auth.default()
-logging_client = google_cloud_logging.Client()
-logger = logging_client.logger(__name__)
+
+logger = None
+
+try:
+    _, project_id = google.auth.default()
+    logging_client = google_cloud_logging.Client()
+    logger = logging_client.logger(__name__)
+except Exception:
+    # Running outside Google Cloud (e.g. Render)
+    logger = None
 allow_origins = (
     os.getenv("ALLOW_ORIGINS", "").split(",") if os.getenv("ALLOW_ORIGINS") else None
 )
@@ -104,7 +110,11 @@ def collect_feedback(feedback: Feedback) -> dict[str, str]:
     Returns:
         Success message
     """
-    logger.log_struct(feedback.model_dump(), severity="INFO")
+    if logger:
+        logger.log_struct(feedback.model_dump(), severity="INFO")
+    else:
+        print(feedback.model_dump())
+
     return {"status": "success"}
 
 
