@@ -310,8 +310,19 @@ async def orchestrator_node(ctx: Context, node_input: Any) -> Event:
     response_text = ""
     if response and hasattr(response, "parts") and response.parts:
         response_text = "".join(part.text for part in response.parts if part.text)
+        response_content = response
     elif isinstance(response, str):
         response_text = response
+        response_content = types.Content(
+            role="model",
+            parts=[types.Part.from_text(text=response)]
+        )
+    else:
+        response_text = str(response)
+        response_content = types.Content(
+            role="model",
+            parts=[types.Part.from_text(text=response_text)]
+        )
         
     # Check if a draft appointment requires human confirmation
     draft = ctx.state.get("appointment_draft")
@@ -320,13 +331,13 @@ async def orchestrator_node(ctx: Context, node_input: Any) -> Event:
         return Event(
             output=response_text,
             route="NEEDS_CONFIRMATION",
-            content=response
+            content=response_content
         )
         
     return Event(
         output=response_text,
         route="COMPLETE",
-        content=response
+        content=response_content
     )
 
 @node
