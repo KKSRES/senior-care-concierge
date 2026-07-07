@@ -509,7 +509,7 @@ python-multipart==0.0.32
     # via
     #   google-adk
     #   mcp
-pywin32==312
+pywin32==312 ; platform_system == "Windows"
     # via mcp
 pyyaml==6.0.3
     # via
