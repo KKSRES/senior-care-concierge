@@ -37,7 +37,10 @@ from app.app_utils.typing import Feedback
 
 load_dotenv()
 setup_telemetry()
-setup_agent_engine_telemetry()
+try:
+    setup_agent_engine_telemetry()
+except Exception:
+    pass
 
 logger = None
 
